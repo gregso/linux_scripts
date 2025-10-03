@@ -1,0 +1,11 @@
+postgresql:
+  enabled: false
+
+global:
+  database:
+    type: "external"
+    host: "localhost"
+    port: "5432"
+    database: "airbyte"
+    user: "datauser"
+    password: "gsowa123"
