@@ -1,16 +1,15 @@
 global:
   edition: community
   instanceId: "airbyte-local"
+  image:
+    pullPolicy: IfNotPresent  # Use cached images if available
+    tag: "1.8.5"  # Pin to specific version (check your current version)
   database:
     type: external
     host: "172.17.0.1"
     port: "5432"
     user: "airbyte"
     password: "airbyte123"
-    configs:
-      database: "airbyte"
-    jobs:
-      database: "airbyte_jobs"
 
 postgresql:
   enabled: false
@@ -19,10 +18,10 @@ externalDatabase:
   type: postgres
   host: "172.17.0.1"
   port: 5432
-  database: "airbyte"
+  database: "db-airbyte"
   user: "airbyte"
   password: "airbyte123"
-  jdbcUrl: "jdbc:postgresql://172.17.0.1:5432/airbyte"
+  jdbcUrl: "jdbc:postgresql://172.17.0.1:5432/db-airbyte"
 
 webapp:
   service:
@@ -46,14 +45,3 @@ worker:
     limits:
       memory: "2Gi"
       cpu: "2000m"
-
-bootloader:
-  extraEnv:
-    - name: DATABASE_DB
-      value: "airbyte"
-    - name: DATABASE_URL
-      value: "jdbc:postgresql://172.17.0.1:5432/airbyte"
-    - name: CONFIGS_DATABASE_NAME
-      value: "airbyte"
-    - name: JOBS_DATABASE_NAME
-      value: "airbyte_jobs"

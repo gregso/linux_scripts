@@ -8,7 +8,7 @@ export PAGER=
 
 # 1. Test direct PostgreSQL connection from host
 echo "1. Testing from host machine:"
-PGPASSWORD=airbyte123 psql -h 172.17.0.1 -U airbyte -d airbyte -t -c "SELECT version();" 2>&1 | head -1
+PGPASSWORD=airbyte123 psql -h 172.17.0.1 -U airbyte -d db-airbyte -t -c "SELECT version();" 2>&1 | head -1
 HOST_TEST=${PIPESTATUS[0]}
 
 # 2. Test from Docker (simulating Kubernetes pod)
@@ -17,7 +17,7 @@ echo "2. Testing from Docker container (simulates K8s pod):"
 docker run --rm \
   -e PGPASSWORD=airbyte123 \
   postgres:13 \
-  psql "postgresql://airbyte:airbyte123@172.17.0.1:5432/airbyte" \
+  psql "postgresql://airbyte:airbyte123@172.17.0.1:5432/db-airbyte" \
   -t -c "SELECT 'Docker connection successful' as status;" 2>&1 | head -1
 DOCKER_TEST=${PIPESTATUS[0]}
 
@@ -29,7 +29,7 @@ if docker network ls | grep -q kind; then
     --network kind \
     -e PGPASSWORD=airbyte123 \
     postgres:13 \
-    psql "postgresql://airbyte:airbyte123@172.17.0.1:5432/airbyte" \
+    psql "postgresql://airbyte:airbyte123@172.17.0.1:5432/db-airbyte" \
     -t -c "SELECT 'Kind network connection successful' as status;" 2>&1 | head -1
   KIND_TEST=${PIPESTATUS[0]}
 else
@@ -78,7 +78,7 @@ else
   echo ""
   echo "Common fixes:"
   echo "  1. Verify password: sudo -u postgres psql -c \"ALTER USER airbyte WITH PASSWORD 'airbyte123';\""
-  echo "  2. Check pg_hba.conf has md5 auth for 172.17.0.0/16"
+  echo "  2. Check pg_hba.conf has md5 auth for 172.17.0.0/16 and 172.18.0.0/16"
   echo "  3. Verify listen_addresses = '*' in postgresql.conf"
   echo "  4. Restart PostgreSQL: sudo systemctl restart postgresql"
 fi
