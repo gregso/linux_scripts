@@ -1,0 +1,5 @@
+
+CREATE DATABASE analytics;
+CREATE USER datauser WITH PASSWORD 'gsowa123';
+GRANT ALL PRIVILEGES ON DATABASE analytics TO datauser;
+ALTER DATABASE analytics OWNER TO datauser;

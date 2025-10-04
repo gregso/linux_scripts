@@ -1,0 +1,50 @@
+global:
+  edition: community
+  
+  # Database configuration (new format for Airbyte 0.50+)
+  database:
+    type: external
+    host: "172.17.0.1"
+    port: "5432"
+    database: "airbyte"
+    user: "airbyte"
+    password: "airbyte123"
+
+# Disable internal PostgreSQL
+postgresql:
+  enabled: false
+
+# External database configuration (legacy format for compatibility)
+externalDatabase:
+  type: postgres
+  host: "172.17.0.1"
+  port: 5432
+  database: "airbyte"
+  user: "airbyte"
+  password: "airbyte123"
+  jdbcUrl: "jdbc:postgresql://172.17.0.1:5432/airbyte"
+
+# Ensure webapp is accessible
+webapp:
+  service:
+    type: NodePort
+    port: 80
+
+# Resource limits (recommended for VMs with limited resources)
+server:
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+
+worker:
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "2Gi"  # Workers need more memory for data syncing
+      cpu: "1000m"

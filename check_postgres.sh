@@ -1709,8 +1709,55 @@ while [[ $# -gt 0 ]]; do
 			suggest_fixes
 			exit 0
 			;;
+		--configure-airbyte-db)
+			shift
+			db_name="${1:-airbyte}"
+			shift
+			db_user="${1:-airbyte}"
+			shift
+			db_pass="${1:-}"
+			configure_airbyte_database "$db_name" "$db_user" "$db_pass"
+			exit 0
+			;;
+		--find-airbyte)
+			find_airbyte_installation
+			exit 0
+			;;
+		--backup-airbyte-data)
+			shift
+			backup_dir="${1:-}"
+			backup_airbyte_metadata "$backup_dir"
+			exit 0
+			;;
+		--restore-airbyte-data)
+			shift
+			backup_file="${1:-}"
+			shift
+			target_db="${1:-airbyte}"
+			restore_airbyte_metadata "$backup_file" "$target_db"
+			exit 0
+			;;
+		--update-airbyte-env)
+			shift
+			env_file="${1:-}"
+			shift
+			db_user="${1:-}"
+			shift
+			db_pass="${1:-}"
+			shift
+			db_name="${1:-}"
+			shift
+			db_host="${1:-localhost}"
+			update_airbyte_env_file "$env_file" "$db_user" "$db_pass" "$db_name" "$db_host"
+			exit 0
+			;;
+		--airbyte-guide)
+			show_airbyte_migration_guide
+			exit 0
+			;;
 		*)
 			echo "Unknown option: $1"
+			echo ""
 			suggest_fixes
 			exit 1
 			;;
